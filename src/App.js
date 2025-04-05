@@ -5,8 +5,7 @@ import BarChart from "./components/BarChart";
 
 
 // TODO
-//  - bar chart neben count auch erwarteter count
-//  - add rest of statistics: most rolled number
+//  - add rest of statistics: most rolled number and expected values for consecutive 6es statistic
 //  - add reset confirmation
 //  - add data persistence via .txt
 //  - style everything
