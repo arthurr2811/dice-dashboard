@@ -1,10 +1,20 @@
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip } from "recharts";
+import {
+    BarChart,
+    Bar,
+    XAxis,
+    YAxis,
+    CartesianGrid,
+    Tooltip,
+    ReferenceLine,
+} from "recharts";
 
-function FrequencyBarChart({ rolls }) {
-    // Frequenz für Zahlen 1 bis 6
-    const frequencies = [1, 2, 3, 4, 5, 6].map((num) => ({
+function FrequencyBarChart({ counts }) {
+    const totalRolls = counts.reduce((sum, count) => sum + count, 0);
+    const expected = totalRolls / 6;
+
+    const frequencies = [1, 2, 3, 4, 5, 6].map((num, i) => ({
         number: num,
-        count: rolls.filter((n) => n === num).length,
+        count: counts[i],
     }));
 
     return (
@@ -16,6 +26,12 @@ function FrequencyBarChart({ rolls }) {
                 <YAxis allowDecimals={false} />
                 <Tooltip />
                 <Bar dataKey="count" fill="#3b82f6" />
+                <ReferenceLine
+                    y={expected}
+                    stroke="red"
+                    strokeDasharray="3 3"
+                    label="Expected"
+                />
             </BarChart>
         </div>
     );

@@ -1,41 +1,17 @@
-function StatsOverview({ rolls, onReset }) {
+function StatsOverview({ rolls, sixStats, onReset }) {
     const totalRolls = rolls.length;
-    const sixes = rolls.filter((n) => n === 6).length;
-    const sixPercent = totalRolls > 0 ? ((sixes / totalRolls) * 100).toFixed(1) : 0;
+    const sixPercent = totalRolls > 0 ? ((sixStats[0] / totalRolls) * 100).toFixed(1) : 0;
 
-    // Zählt aufeinanderfolgende 6en
-    const countSixPairs = () => {
-        let count = 0;
-        let i = 0;
-
-        while (i < rolls.length) {
-            if (rolls[i] === 6) {
-                let streak = 0;
-                while (i < rolls.length && rolls[i] === 6) {
-                    streak++;
-                    i++;
-                }
-                if (streak >= 2) {
-                    count++; // ein Pasch gefunden
-                }
-            } else {
-                i++;
-            }
-        }
-
-        return count;
-    };
-
-
-    const sixPairs = countSixPairs();
 
     return (
         <div className="container">
             <h2 className="heading">📊 Statistics</h2>
             <ul className="mb-4">
-                <li>Total rows: <strong>{totalRolls}</strong></li>
+                <li>Total rolls: <strong>{totalRolls}</strong></li>
                 <li>Percentage of 6: <strong>{sixPercent}%</strong></li>
-                <li>Number of consecutive sixes: <strong>{sixPairs}</strong></li>
+                <li>Number of 2 consecutive sixes: <strong>{sixStats[1]}</strong></li>
+                <li>Number of 3 consecutive sixes: <strong>{sixStats[2]}</strong></li>
+                <li>Number of 4 consecutive sixes: <strong>{sixStats[3]}</strong></li>
             </ul>
             <button
                 onClick={onReset}
