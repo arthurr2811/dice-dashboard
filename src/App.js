@@ -3,6 +3,13 @@ import DiceInput from "./components/DiceInput";
 import StatsOverview from "./components/StatsOverview";
 import BarChart from "./components/BarChart";
 
+
+// TODO
+//  - add all statistics
+//  - update false input feedback to be less
+//  - add reset confirmation
+//  - add data persistence via .txt
+//  - style everything
 function App() {
   const [rolls, setRolls] = useState([]);
 

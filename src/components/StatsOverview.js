@@ -30,18 +30,18 @@ function StatsOverview({ rolls, onReset }) {
     const sixPairs = countSixPairs();
 
     return (
-        <div className="bg-gray-100 p-4 rounded mb-4 shadow">
-            <h2 className="text-xl font-semibold mb-2">📊 Statistiken</h2>
+        <div className="container">
+            <h2 className="heading">📊 Statistics</h2>
             <ul className="mb-4">
-                <li>Gesamtwürfe: <strong>{totalRolls}</strong></li>
-                <li>Anteil 6en: <strong>{sixPercent}%</strong></li>
-                <li>Anzahl 6er-Paschs: <strong>{sixPairs}</strong></li>
+                <li>Total rows: <strong>{totalRolls}</strong></li>
+                <li>Percentage of 6: <strong>{sixPercent}%</strong></li>
+                <li>Number of consecutive sixes: <strong>{sixPairs}</strong></li>
             </ul>
             <button
                 onClick={onReset}
-                className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+                className="button-reset"
             >
-                Zurücksetzen
+                Reset statistics
             </button>
         </div>
     );

@@ -10,24 +10,28 @@ function DiceInput({ onRoll }) {
             onRoll(value);
             setInput("");
         } else {
-            alert("Bitte eine Zahl von 1 bis 6 eingeben");
+            alert("Number has to be 1-6");
         }
     };
 
     return (
-        <form onSubmit={handleSubmit} className="mb-4">
-            <input
-                type="number"
-                min="1"
-                max="6"
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                className="border p-2 rounded mr-2"
-            />
-            <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">
-                Würfelergebnis hinzufügen
-            </button>
-        </form>
+        <div className="container">
+            <h2 className="heading">➕ Add dice roll</h2>
+            <form onSubmit={handleSubmit} className="mb-4">
+                <input
+                    type="number"
+                    min="1"
+                    max="6"
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
+                    className="border p-2 rounded mr-2"
+                />
+                <button type="submit" className="button-add-roll">
+                    Add
+                </button>
+            </form>
+        </div>
+
     );
 }
 

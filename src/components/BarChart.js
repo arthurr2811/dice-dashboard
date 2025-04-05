@@ -8,8 +8,8 @@ function FrequencyBarChart({ rolls }) {
     }));
 
     return (
-        <div className="bg-white p-4 rounded shadow">
-            <h2 className="text-xl font-semibold mb-4">📈 Häufigkeit der Würfe</h2>
+        <div className="container">
+            <h2 className="heading">📈 Roll frequency</h2>
             <BarChart width={500} height={300} data={frequencies}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="number" />
