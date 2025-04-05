@@ -20,7 +20,6 @@ const CustomTooltip = ({ active, payload, label, expected }) => {
             </div>
         );
     }
-
     return null;
 };
 

@@ -15,7 +15,6 @@ function App() {
     const [sixStats, setSixStats] = useState([0, 0, 0, 0]); // aka [total6s, pairs, triplets, quadruplets]
     const [sixStreak, setSixStreak] = useState(0);
 
-
     const addRoll = (n) => {
         if (n < 1 || n > 6) return;
         // Neuen Wurf speichern
@@ -42,14 +41,12 @@ function App() {
         setSixStats(newSixStats);
     };
 
-
     const resetStats = () => {
         setRolls([]);
         setCounts([0, 0, 0, 0, 0, 0]);
         setSixStats([0, 0, 0, 0]);
         setSixStreak(0);
     };
-
 
     return (
       <div className="p-6">

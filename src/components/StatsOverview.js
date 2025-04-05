@@ -2,7 +2,6 @@ function StatsOverview({ rolls, sixStats, onReset }) {
     const totalRolls = rolls.length;
     const sixPercent = totalRolls > 0 ? ((sixStats[0] / totalRolls) * 100).toFixed(1) : 0;
 
-
     return (
         <div className="container">
             <h2 className="heading">📊 Statistics</h2>
@@ -22,5 +21,4 @@ function StatsOverview({ rolls, sixStats, onReset }) {
         </div>
     );
 }
-
 export default StatsOverview;
