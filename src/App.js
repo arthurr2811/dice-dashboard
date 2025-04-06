@@ -5,7 +5,6 @@ import BarChart from "./components/BarChart";
 
 
 // TODO
-//  - add reset confirmation
 //  - add data persistence via .txt
 //  - style everything
 function App() {
@@ -53,14 +52,17 @@ function App() {
     };
 
     const resetStats = () => {
+        const confirmed = window.confirm("Are you sure you want to reset all statistics?");
+        if (!confirmed) return;
+
         setRolls([]);
         setCounts([0, 0, 0, 0, 0, 0]);
         setSixStats([0, 0, 0, 0]);
         setSixStreak(0);
         setNoSixStreak(0);
         setLongestNoSixStreak(0);
-
     };
+
 
     return (
       <div className="p-6">
