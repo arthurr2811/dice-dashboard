@@ -5,7 +5,6 @@ import BarChart from "./components/BarChart";
 
 
 // TODO
-//  - add rest of statistics:and expected values for consecutive 6es statistic
 //  - add reset confirmation
 //  - add data persistence via .txt
 //  - style everything
