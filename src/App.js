@@ -5,7 +5,7 @@ import BarChart from "./components/BarChart";
 
 
 // TODO
-//  - add rest of statistics: most rolled number and expected values for consecutive 6es statistic
+//  - add rest of statistics:and expected values for consecutive 6es statistic
 //  - add reset confirmation
 //  - add data persistence via .txt
 //  - style everything
@@ -14,6 +14,8 @@ function App() {
     const[counts, setCounts] = useState([0,0,0,0,0,0]); // aka [countOnes, countTwos...]
     const [sixStats, setSixStats] = useState([0, 0, 0, 0]); // aka [total6s, pairs, triplets, quadruplets]
     const [sixStreak, setSixStreak] = useState(0);
+    const [noSixStreak, setNoSixStreak] = useState(0);
+    const [longestNoSixStreak, setLongestNoSixStreak] = useState(0);
 
     const addRoll = (n) => {
         if (n < 1 || n > 6) return;
@@ -37,8 +39,18 @@ function App() {
         } else {
             setSixStreak(0);
         }
-
         setSixStats(newSixStats);
+
+        // No-6 streak tracking
+        if (n !== 6) {
+            const newNoSixStreak = noSixStreak + 1;
+            setNoSixStreak(newNoSixStreak);
+            if (newNoSixStreak > longestNoSixStreak) {
+                setLongestNoSixStreak(newNoSixStreak);
+            }
+        } else {
+            setNoSixStreak(0);
+        }
     };
 
     const resetStats = () => {
@@ -46,14 +58,23 @@ function App() {
         setCounts([0, 0, 0, 0, 0, 0]);
         setSixStats([0, 0, 0, 0]);
         setSixStreak(0);
+        setNoSixStreak(0);
+        setLongestNoSixStreak(0);
+
     };
 
     return (
       <div className="p-6">
         <h1 className="text-2xl font-bold mb-4">🎲 Dice Dashboard</h1>
         <DiceInput onRoll={addRoll} />
-        <StatsOverview rolls={rolls} sixStats={sixStats} onReset={resetStats} />
-        <BarChart counts={counts} />
+          <StatsOverview
+              rolls={rolls}
+              sixStats={sixStats}
+              longestNoSixStreak={longestNoSixStreak}
+              onReset={resetStats}
+          />
+
+          <BarChart counts={counts} />
       </div>
   );
 }

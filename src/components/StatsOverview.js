@@ -1,4 +1,4 @@
-function StatsOverview({ rolls, sixStats, onReset }) {
+function StatsOverview({ rolls, sixStats, onReset, longestNoSixStreak }) {
     const totalRolls = rolls.length;
     const sixPercent = totalRolls > 0 ? ((sixStats[0] / totalRolls) * 100).toFixed(1) : 0;
 
@@ -11,6 +11,7 @@ function StatsOverview({ rolls, sixStats, onReset }) {
                 <li>Number of 2 consecutive sixes: <strong>{sixStats[1]}</strong></li>
                 <li>Number of 3 consecutive sixes: <strong>{sixStats[2]}</strong></li>
                 <li>Number of 4 consecutive sixes: <strong>{sixStats[3]}</strong></li>
+                <li>Longest streak without a six: <strong>{longestNoSixStreak}</strong></li>
             </ul>
             <button
                 onClick={onReset}
