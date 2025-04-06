@@ -5,7 +5,6 @@ import BarChart from "./components/BarChart";
 
 
 // TODO
-//  - add data persistence via .txt
 //  - style everything
 function App() {
     const [rolls, setRolls] = useState([]);
@@ -63,20 +62,107 @@ function App() {
         setLongestNoSixStreak(0);
     };
 
+    // Export Rolls to .txt
+    const exportRolls = () => {
+        const content = rolls.join(",");
+        const blob = new Blob([content], { type: "text/plain" });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.download = "dice_rolls.txt";
+        link.href = url;
+        link.click();
+    };
+
+    // Import Rolls from .txt
+    const importRolls = (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            const text = event.target.result;
+            const parsed = text
+                .split(",")
+                .map((s) => parseInt(s.trim()))
+                .filter((n) => !isNaN(n) && n >= 1 && n <= 6);
+            setRolls([]); // reset old rolls before processing
+            processRolls(parsed);
+        };
+        reader.readAsText(file);
+    };
+
+    const processRolls = (newRolls) => {
+        const newCounts = [0, 0, 0, 0, 0, 0];
+        const newSixStats = [0, 0, 0, 0];
+        let sixStreak = 0;
+        let noSixStreak = 0;
+        let longestNoSixStreak = 0;
+
+        newRolls.forEach((n) => {
+            if (n < 1 || n > 6) return;
+
+            newCounts[n - 1] += 1;
+
+            // 6er-Stats
+            if (n === 6) {
+                sixStreak += 1;
+                noSixStreak = 0;
+
+                newSixStats[0] += 1;
+                if (sixStreak === 2) newSixStats[1] += 1;
+                if (sixStreak === 3) newSixStats[2] += 1;
+                if (sixStreak === 4) newSixStats[3] += 1;
+            } else {
+                sixStreak = 0;
+                noSixStreak += 1;
+                if (noSixStreak > longestNoSixStreak) {
+                    longestNoSixStreak = noSixStreak;
+                }
+            }
+        });
+
+        // Alle States auf einmal setzen
+        setRolls(newRolls);
+        setCounts(newCounts);
+        setSixStats(newSixStats);
+        setSixStreak(sixStreak);
+        setNoSixStreak(noSixStreak);
+        setLongestNoSixStreak(longestNoSixStreak);
+    };
+
+
 
     return (
-      <div className="p-6">
-        <h1 className="text-2xl font-bold mb-4">🎲 Dice Dashboard</h1>
-        <DiceInput onRoll={addRoll} />
-          <StatsOverview
-              rolls={rolls}
-              sixStats={sixStats}
-              longestNoSixStreak={longestNoSixStreak}
-              onReset={resetStats}
-          />
-
-          <BarChart counts={counts} />
+      <div className="container">
+        <div>
+            <h1 className="text-2xl font-bold mb-4">🎲 Dice Dashboard</h1>
+            <DiceInput onRoll={addRoll} />
+            <StatsOverview
+                rolls={rolls}
+                sixStats={sixStats}
+                longestNoSixStreak={longestNoSixStreak}
+                onReset={resetStats}
+            />
+            <BarChart counts={counts} />
+        </div>
+          <div>
+              <button
+                  onClick={exportRolls}
+                  className="button-add-roll"
+              >
+                  Export Rolls
+              </button>
+              <label className="">
+                  <input
+                      type="file"
+                      accept=".txt"
+                      onChange={importRolls}
+                      className="button-reset"
+                  />
+              </label>
+          </div>
       </div>
+
   );
 }
 
