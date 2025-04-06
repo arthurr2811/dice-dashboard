@@ -27,13 +27,12 @@ function DiceInput({ onRoll }) {
                     type="text"
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
-                    className="border p-2 rounded mr-2 w-24"
                     placeholder="Youre Roll 1–6"
                 />
                 <button type="submit" className="button-add-roll">
                     Add
                 </button>
-                {error && <p className="text-red-500 mt-2">{error}</p>}
+                {error && <p>{error}</p>}
             </form>
         </div>
 

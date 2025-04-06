@@ -13,7 +13,7 @@ const CustomTooltip = ({ active, payload, label, expected }) => {
         const actual = payload[0].value;
 
         return (
-            <div className="bg-white p-2 rounded shadow border text-sm">
+            <div>
                 <p><strong>Number:</strong> {label}</p>
                 <p><strong>Rolled:</strong> {actual}×</p>
                 <p><strong>Expected:</strong> {expected.toFixed(2)}×</p>
