@@ -33,7 +33,7 @@ function FrequencyBarChart({ counts }) {
     }));
 
     return (
-        <div className="container">
+        <div className="container bar-chart-container">
             <h2 className="heading">📈 Roll frequency</h2>
             <BarChart width={500} height={300} data={frequencies}>
                 <CartesianGrid strokeDasharray="3 3" />

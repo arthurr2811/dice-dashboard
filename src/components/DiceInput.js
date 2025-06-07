@@ -2,7 +2,7 @@ import { useState } from "react";
 
 function DiceInput({ onRoll }) {
     const [input, setInput] = useState("");
-    const [error, setError] = useState("ready...");
+    const [error, setError] = useState("");
 
 
     const handleSubmit = (e) => {
@@ -12,10 +12,10 @@ function DiceInput({ onRoll }) {
         if (value >= 1 && value <= 6) {
             onRoll(value);
             setInput("");
-            setError("ready..."); // Reset error
+            setError(""); // Reset error
         } else {
             setInput("");
-            setError("Only numbers 1–6 are allowed.");
+            setError("Falsely Input (not a Number 1-6)");
         }
     };
 

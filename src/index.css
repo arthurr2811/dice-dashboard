@@ -1,70 +1,303 @@
+/* General Styles */
 body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background-color: #f0f2f5;
+    color: #333;
+    line-height: 1.6;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+#root {
+    display: flex;
+    justify-content: center;
+    padding: 2rem;
+    flex-wrap: wrap;
 }
 
-/* Button Styles */
+/* Specific styling for the main app container */
+.main-app-container {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem; /* distance between main sections */
+    width: 100%;
+    max-width: 1200px;
+}
+
+/* Container for each section (DiceInput, StatsOverview, BarChart) */
+.container {
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    padding: 1.5rem 2rem;
+    flex: 1; /* Allows containers to grow and shrink */
+    min-width: 300px; /* Minimum width before wrapping */
+}
+
+/* Container for Stats and Chart to be side-by-side */
+.stats-and-chart-container {
+    display: flex;
+    gap: 2rem; /* distance between Stats and Chart */
+    flex-wrap: wrap; /* wrap if not enough space */
+    align-items: flex-start;
+}
+.stats-and-chart-container > .container {
+    flex: 1; /* keep sizes of Stats and Chart the same */
+}
+
+/* Headings */
+h1 {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+h2.heading {
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: #34495e;
+    margin-bottom: 1.2rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #eee;
+}
+
+/* Input Fields */
+input[type="text"] {
+    width: calc(100% - 2rem); /* Full width minus padding */
+    padding: 0.8rem 1rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    box-sizing: border-box; /* Include padding in width */
+}
+
+input[type="text"]:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+}
+
+/* Buttons */
+.button-add-roll,
 .button-reset {
-  background-color: #f87171; /* Tailwind red-500 */
-  color: white;
-  padding: 0.5rem 1rem; /* 2x padding: py-2, px-4 */
-  border-radius: 0.375rem; /* rounded */
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.button-reset:hover {
-  background-color: #fca5a5; /* Tailwind red-600 */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.8rem 1.5rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.1s ease;
+    font-weight: 600;
+    font-size: 1rem;
+    border: none;
 }
 
 .button-add-roll {
-  background-color: #3b82f6; /* Tailwind blue-500 */
-  color: white;
-  padding: 0.5rem 1rem; /* 2x padding: py-2, px-4 */
-  border-radius: 0.375rem; /* rounded */
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  font-weight: bold;
+    background-color: #3b82f6; /* Blue */
+    color: white;
+    margin-left: 0.5rem; /* Space between input and button */
 }
 
 .button-add-roll:hover {
-  background-color: #2563eb; /* Tailwind blue-600 */
+    background-color: #2563eb; /* Darker blue */
+    transform: translateY(-1px);
 }
 
 .button-add-roll:active {
-  background-color: #1d4ed8; /* Tailwind blue-700 for active state */
+    background-color: #1d4ed8; /* Even darker blue */
+    transform: translateY(0);
 }
 
-/* Other global styles */
-.container {
-  padding: 1.5rem; /* Equivalent to p-6 */
+.button-reset {
+    background-color: #ef4444; /* Red */
+    color: white;
+    margin-top: 1.5rem; /* More space for the reset button */
 }
 
-.heading {
-  font-size: 1.25rem; /* Equivalent to text-xl */
-  font-weight: 600;   /* Equivalent to font-semibold */
-  margin-bottom: 1rem; /* Equivalent to mb-4 */
+.button-reset:hover {
+    background-color: #dc2626; /* Darker red */
+    transform: translateY(-1px);
 }
 
-input {
-  padding: 0.5rem 1rem; /* 2x padding: py-2, px-4 */
-  border-radius: 0.375rem; /* rounded */
+.button-reset:active {
+    background-color: #b91c1c; /* Even darker red */
+    transform: translateY(0);
 }
 
-.stats-grid {
-  display: grid;
-  grid-template-columns: 1fr 3fr;
-  gap: 0.1rem;
-  margin-bottom: 1rem;
+/* Form specific styles */
+form {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
 }
 
+form p { /* For error messages */
+    color: #ef4444;
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+    margin-bottom: 0;
+}
 
+/* Stats Overview Grid */
+.stats-grid-new {
+    display: grid;
+    /* Responsive Grid: 2 columns on larger screens, 1 on smaller */
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem; /* Space between the stat boxes */
+    margin-bottom: 1.5rem;
+}
+
+.stat-box {
+    background-color: #f9f9f9; /* Slightly off-white background for boxes */
+    border: 1px solid #e0e0e0; /* Light border */
+    border-radius: 8px;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center content horizontally */
+    justify-content: center; /* Center content vertically */
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05); /* Very subtle shadow */
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.stat-box:hover {
+    transform: translateY(-3px); /* Slight lift on hover */
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1); /* Slightly more prominent shadow on hover */
+}
+
+.stat-value {
+    font-size: 2.2rem; /* Large font for the main number */
+    font-weight: 700;
+    color: #3b82f6; /* Blue accent color */
+    line-height: 1.2; /* Tighter line height */
+    margin-bottom: 0.2rem;
+}
+
+.stat-label {
+    font-size: 1.1rem; /* Smaller font for the description */
+    color: #555;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+}
+
+.stat-expected {
+    font-size: 0.9rem; /* Smallest font for the expected value */
+    color: #888;
+    font-weight: 400;
+}
+
+/* File input for import/export buttons */
+input[type="file"] {
+    display: none; /* Hide default file input */
+}
+
+.button-export-import {
+    background-color: #60a5fa; /* A softer blue for export/import */
+    color: white;
+    padding: 0.8rem 1.5rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.1s ease;
+    font-weight: 600;
+    font-size: 1rem;
+    border: none;
+    display: inline-block; /* Treat as block for layout */
+    margin-top: 1rem;
+}
+
+.button-export-import:hover {
+    background-color: #3b82f6;
+    transform: translateY(-1px);
+}
+
+/* Flex layout for import/export buttons at the bottom */
+.action-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-start; /* Align to the start */
+    margin-top: 2rem; /* Space above these buttons */
+    padding-left: 2rem; /* Align with content within boxes */
+}
+
+/* Specific overrides for BarChart container - adjust as needed */
+.bar-chart-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center the chart within its box */
+    padding: 1.5rem 2rem; /* Consistent padding */
+}
+
+/* Custom Tooltip for BarChart (if you have one) */
+.custom-tooltip {
+    background-color: rgba(255, 255, 255, 0.95);
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    color: #333;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+/* Media Queries for Responsiveness */
+@media (max-width: 1024px) {
+    .stats-and-chart-container {
+        flex-direction: column; /* Stack Stats and Chart vertically on medium/small screens */
+        align-items: stretch; /* Stretch to full width */
+    }
+}
+
+@media (max-width: 768px) {
+    #root {
+        flex-direction: column;
+        padding: 1rem;
+        gap: 1.5rem;
+    }
+
+    .container {
+        margin-bottom: 1rem;
+        padding: 1rem 1.5rem;
+    }
+
+    h1 {
+        font-size: 1.8rem;
+    }
+
+    h2.heading {
+        font-size: 1.4rem;
+    }
+
+    .stats-grid-new {
+        grid-template-columns: 1fr;
+    }
+
+    form {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    input[type="text"] {
+        width: 100%;
+    }
+
+    .button-add-roll {
+        margin-left: 0;
+        width: 100%;
+    }
+
+    .action-buttons {
+        flex-direction: column;
+        align-items: stretch;
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
+    }
+
+    .button-export-import {
+        width: 100%;
+    }
+}

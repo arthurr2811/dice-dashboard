@@ -4,8 +4,6 @@ import StatsOverview from "./components/StatsOverview";
 import BarChart from "./components/BarChart";
 
 
-// TODO
-//  - style everything
 function App() {
     const [rolls, setRolls] = useState([]);
     const[counts, setCounts] = useState([0,0,0,0,0,0]); // aka [countOnes, countTwos...]
@@ -132,37 +130,41 @@ function App() {
 
 
     return (
-      <div className="container">
-        <div>
-            <h1 className="text-2xl font-bold mb-4">🎲 Dice Dashboard</h1>
-            <DiceInput onRoll={addRoll} />
-            <StatsOverview
-                rolls={rolls}
-                sixStats={sixStats}
-                longestNoSixStreak={longestNoSixStreak}
-                onReset={resetStats}
-            />
-            <BarChart counts={counts} />
-        </div>
-          <div>
-              <button
-                  onClick={exportRolls}
-                  className="button-add-roll"
-              >
-                  Export Rolls
-              </button>
-              <label className="">
-                  <input
-                      type="file"
-                      accept=".txt"
-                      onChange={importRolls}
-                      className="button-reset"
-                  />
-              </label>
-          </div>
-      </div>
+        <div className="main-app-container">
+            <div>
+                <h1>🎲 Dice Dashboard</h1>
+                <DiceInput onRoll={addRoll} />
+            </div>
 
-  );
+            <div className="stats-and-chart-container">
+                <StatsOverview
+                    rolls={rolls}
+                    sixStats={sixStats}
+                    longestNoSixStreak={longestNoSixStreak}
+                    onReset={resetStats}
+                />
+                <BarChart counts={counts} />
+            </div>
+
+            <div className="action-buttons">
+                <button
+                    onClick={exportRolls}
+                    className="button-export-import"
+                >
+                    Export Rolls
+                </button>
+                <label className="button-export-import">
+                    <input
+                        type="file"
+                        accept=".txt"
+                        onChange={importRolls}
+                        placeholder={"Import Rolls"}
+                    />
+                    Import Rolls
+                </label>
+            </div>
+        </div>
+    );
 }
 
 export default App;
