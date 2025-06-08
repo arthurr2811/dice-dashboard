@@ -23,7 +23,7 @@ function StatsOverview({ rolls, sixStats, onReset, longestNoSixStreak }) {
                 {/* Two Consecutive Sixes Stat Box */}
                 <div className="stat-box">
                     <span className="stat-value">{sixStats[1]}</span>
-                    <span className="stat-label">2 consecutive sixes</span>
+                    <span className="stat-label">Two sixes in a row</span>
                     <span className="stat-expected">Expected: {
                         Math.max(0, (totalRolls - 1) * Math.pow(1/6, 2)).toFixed(0)
                     }</span>
@@ -32,7 +32,7 @@ function StatsOverview({ rolls, sixStats, onReset, longestNoSixStreak }) {
                 {/* Three Consecutive Sixes Stat Box */}
                 <div className="stat-box">
                     <span className="stat-value">{sixStats[2]}</span>
-                    <span className="stat-label">3 consecutive sixes</span>
+                    <span className="stat-label">Three sixes in a row</span>
                     <span className="stat-expected">Expected: {
                         Math.max(0, (totalRolls - 2) * Math.pow(1/6, 3) || 0).toFixed(0)
                     }</span>
@@ -41,7 +41,7 @@ function StatsOverview({ rolls, sixStats, onReset, longestNoSixStreak }) {
                 {/* Four Consecutive Sixes Stat Box */}
                 <div className="stat-box">
                     <span className="stat-value">{sixStats[3]}</span>
-                    <span className="stat-label">4 consecutive sixes</span>
+                    <span className="stat-label">Four sixes in a row</span>
                     <span className="stat-expected">Expected: {
                         Math.max(0, (totalRolls - 3) * Math.pow(1/6, 4) || 0).toFixed(0)
                     }</span>
@@ -50,7 +50,7 @@ function StatsOverview({ rolls, sixStats, onReset, longestNoSixStreak }) {
                 {/* Longest No Six Streak Stat Box */}
                 <div className="stat-box">
                     <span className="stat-value">{longestNoSixStreak}</span>
-                    <span className="stat-label">Longest streak without a 6</span>
+                    <span className="stat-label">Longest streak without a six</span>
                 </div>
 
             </div>
