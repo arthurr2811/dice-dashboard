@@ -1,49 +1,97 @@
-import { useState } from "react";
-import DiceInput from "./components/DiceInput";
-import StatsOverview from "./components/StatsOverview";
-import BarChart from "./components/BarChart";
+import { useState, useEffect } from "react";
+import DiceInput from "./components/DiceInput.js";
+import StatsOverview from "./components/StatsOverview.js";
+import BarChart from "./components/BarChart.js";
 
+const SERVER = "http://localhost:4000";
 
 function App() {
     const [rolls, setRolls] = useState([]);
-    const[counts, setCounts] = useState([0,0,0,0,0,0]); // aka [countOnes, countTwos...]
-    const [sixStats, setSixStats] = useState([0, 0, 0, 0]); // aka [total6s, pairs, triplets, quadruplets]
+    const [counts, setCounts] = useState([0, 0, 0, 0, 0, 0]); // counts [1..6]
+    const [sixStats, setSixStats] = useState([0, 0, 0, 0]);   // [total6s, pairs, triplets, quadruplets]
     const [sixStreak, setSixStreak] = useState(0);
     const [noSixStreak, setNoSixStreak] = useState(0);
     const [longestNoSixStreak, setLongestNoSixStreak] = useState(0);
 
+    // Backend I/O
+    const loadState = async () => {
+        try {
+            const res = await fetch(`${SERVER}/state`);
+            const data = await res.json();
+            setRolls(data.rolls || []);
+            setCounts(data.counts || [0, 0, 0, 0, 0, 0]);
+            setSixStats(data.sixStats || [0, 0, 0, 0]);
+            setSixStreak(data.sixStreak || 0);
+            setNoSixStreak(data.noSixStreak || 0);
+            setLongestNoSixStreak(data.longestNoSixStreak || 0);
+        } catch (e) {
+            console.warn("Konnte State nicht laden:", e);
+        }
+    };
+
+    const saveState = async (stateObj) => {
+        try {
+            await fetch(`${SERVER}/state`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(stateObj),
+            });
+        } catch (e) {
+            console.warn("Konnte State nicht speichern:", e);
+        }
+    };
+
+    // on start: load data from backend
+    useEffect(() => {
+        loadState();
+    }, []);
+
+
+
     // add a new dice roll
     const addRoll = (n) => {
         if (n < 1 || n > 6) return;
-        // add roll to rolls
+
         const updatedRolls = [...rolls, n];
-        setRolls(updatedRolls);
-        // update counts
         const updatedCounts = [...counts];
-        updatedCounts[n - 1] += 1; // n ist 1–6 → index 0–5
-        setCounts(updatedCounts);
-        // update six stats
+        updatedCounts[n - 1] += 1;
+
         const newSixStats = [...sixStats];
+        let newSixStreak = sixStreak;
+        let newNoSixStreak = noSixStreak;
+        let newLongestNoSixStreak = longestNoSixStreak;
+
         if (n === 6) {
-            const newStreak = sixStreak + 1;
-            setSixStreak(newStreak);
+            newSixStreak += 1;
+            newNoSixStreak = 0;
             newSixStats[0] += 1; // total 6s
-            if (newStreak === 2) newSixStats[1] += 1; // pair
-            if (newStreak === 3) newSixStats[2] += 1; // triplet
-            if (newStreak === 4) newSixStats[3] += 1; // quadruplet
+            if (newSixStreak === 2) newSixStats[1] += 1; // pair
+            if (newSixStreak === 3) newSixStats[2] += 1; // triplet
+            if (newSixStreak === 4) newSixStats[3] += 1; // quadruplet
         } else {
-            setSixStreak(0);
-        }
-        setSixStats(newSixStats);
-        if (n !== 6) {
-            const newNoSixStreak = noSixStreak + 1;
-            setNoSixStreak(newNoSixStreak);
-            if (newNoSixStreak > longestNoSixStreak) {
-                setLongestNoSixStreak(newNoSixStreak);
+            newSixStreak = 0;
+            newNoSixStreak += 1;
+            if (newNoSixStreak > newLongestNoSixStreak) {
+                newLongestNoSixStreak = newNoSixStreak;
             }
-        } else {
-            setNoSixStreak(0);
         }
+
+        // update local and write to backend
+        setRolls(updatedRolls);
+        setCounts(updatedCounts);
+        setSixStats(newSixStats);
+        setSixStreak(newSixStreak);
+        setNoSixStreak(newNoSixStreak);
+        setLongestNoSixStreak(newLongestNoSixStreak);
+
+        saveState({
+            rolls: updatedRolls,
+            counts: updatedCounts,
+            sixStats: newSixStats,
+            sixStreak: newSixStreak,
+            noSixStreak: newNoSixStreak,
+            longestNoSixStreak: newLongestNoSixStreak,
+        });
     };
 
     // resets all stats
@@ -51,12 +99,23 @@ function App() {
         const confirmed = window.confirm("Are you sure you want to reset all statistics?");
         if (!confirmed) return;
 
-        setRolls([]);
-        setCounts([0, 0, 0, 0, 0, 0]);
-        setSixStats([0, 0, 0, 0]);
-        setSixStreak(0);
-        setNoSixStreak(0);
-        setLongestNoSixStreak(0);
+        const fresh = {
+            rolls: [],
+            counts: [0, 0, 0, 0, 0, 0],
+            sixStats: [0, 0, 0, 0],
+            sixStreak: 0,
+            noSixStreak: 0,
+            longestNoSixStreak: 0,
+        };
+
+        setRolls(fresh.rolls);
+        setCounts(fresh.counts);
+        setSixStats(fresh.sixStats);
+        setSixStreak(fresh.sixStreak);
+        setNoSixStreak(fresh.noSixStreak);
+        setLongestNoSixStreak(fresh.longestNoSixStreak);
+
+        saveState(fresh);
     };
 
     // Export Rolls to .txt
@@ -89,45 +148,49 @@ function App() {
         reader.readAsText(file);
     };
 
-    // calculate all statistics new, when imported rolls
+    // calculate all statistics new, when import
     const processImportedRolls = (newRolls) => {
         const newCounts = [0, 0, 0, 0, 0, 0];
         const newSixStats = [0, 0, 0, 0];
-        let sixStreak = 0;
-        let noSixStreak = 0;
-        let longestNoSixStreak = 0;
+        let sixStreakLocal = 0;
+        let noSixStreakLocal = 0;
+        let longestNoSixStreakLocal = 0;
 
         newRolls.forEach((n) => {
             if (n < 1 || n > 6) return;
-            // update counts
             newCounts[n - 1] += 1;
-            // update sixes-stats
             if (n === 6) {
-                sixStreak += 1;
-                noSixStreak = 0;
+                sixStreakLocal += 1;
+                noSixStreakLocal = 0;
                 newSixStats[0] += 1;
-                if (sixStreak === 2) newSixStats[1] += 1;
-                if (sixStreak === 3) newSixStats[2] += 1;
-                if (sixStreak === 4) newSixStats[3] += 1;
+                if (sixStreakLocal === 2) newSixStats[1] += 1;
+                if (sixStreakLocal === 3) newSixStats[2] += 1;
+                if (sixStreakLocal === 4) newSixStats[3] += 1;
             } else {
-                sixStreak = 0;
-                noSixStreak += 1;
-                if (noSixStreak > longestNoSixStreak) {
-                    longestNoSixStreak = noSixStreak;
+                sixStreakLocal = 0;
+                noSixStreakLocal += 1;
+                if (noSixStreakLocal > longestNoSixStreakLocal) {
+                    longestNoSixStreakLocal = noSixStreakLocal;
                 }
             }
         });
 
-        //set new statistics
         setRolls(newRolls);
         setCounts(newCounts);
         setSixStats(newSixStats);
-        setSixStreak(sixStreak);
-        setNoSixStreak(noSixStreak);
-        setLongestNoSixStreak(longestNoSixStreak);
+        setSixStreak(sixStreakLocal);
+        setNoSixStreak(noSixStreakLocal);
+        setLongestNoSixStreak(longestNoSixStreakLocal);
+
+        saveState({
+            rolls: newRolls,
+            counts: newCounts,
+            sixStats: newSixStats,
+            sixStreak: sixStreakLocal,
+            noSixStreak: noSixStreakLocal,
+            longestNoSixStreak: longestNoSixStreakLocal,
+        });
     };
-
-
 
     return (
         <div className="main-app-container">
@@ -147,10 +210,7 @@ function App() {
             </div>
 
             <div className="action-buttons">
-                <button
-                    onClick={exportRolls}
-                    className="button-export-import"
-                >
+                <button onClick={exportRolls} className="button-export-import">
                     Export Rolls
                 </button>
                 <label className="button-export-import">
