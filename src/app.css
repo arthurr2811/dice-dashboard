@@ -45,6 +45,53 @@ body {
 .stats-and-chart-container > .container {
     flex: 1; /* keep sizes of Stats and Chart the same */
 }
+.container-overlay {
+    background-color: rgba(0, 0, 0, 0.2);
+    color: white;
+    border-radius: 12px;
+    padding: 1rem 1.5rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    text-align: center;
+}
+
+.container-overlay .stat-box {
+    background-color: transparent; /* komplett transparent */
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: white;
+}
+
+.container-overlay .stat-value {
+    color: rgb(238, 238, 238);
+}
+
+.container-overlay .stat-label,
+.container-overlay .stat-expected {
+    color: rgb(238, 238, 238, 0.8);
+}
+.bar-chart-container.overlay {
+    background-color: rgba(0, 0, 0, 0.2); /* transparent schwarzer Hintergrund */
+    color: white;                           /* Schrift weiß */
+    padding: 1rem 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    text-align: center;
+}
+
+/* Balken in Overlay hellgrau-transparent */
+.bar-chart-container.overlay .bar {
+    background-color: rgba(255, 255, 255, 0.6); /* helle, transparente Balken */
+}
+
+/* Tooltip im Overlay */
+.bar-chart-container.overlay .custom-tooltip {
+    background-color: rgba(0, 0, 0, 0.7);  /* dunkler Hintergrund */
+    color: #fff;                           /* weiße Schrift */
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 8px;
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
 
 /* Headings */
 h1 {
@@ -62,6 +109,7 @@ h2.heading {
     margin-bottom: 1.2rem;
     padding-bottom: 0.5rem;
     border-bottom: 1px solid #eee;
+    text-align: center;
 }
 
 /* Input Fields */
@@ -231,6 +279,7 @@ input[type="file"] {
     flex-direction: column;
     align-items: center; /* Center the chart within its box */
     padding: 1.5rem 2rem; /* Consistent padding */
+    background-color: #fff;
 }
 
 /* Custom Tooltip for BarChart (if you have one) */

@@ -21,7 +21,7 @@ function DiceInput({ onRoll }) {
 
     return (
         <div className="container">
-            <h2 className="heading">➕ Add dice roll</h2>
+            <h2 className="heading">Add dice roll</h2>
             <form onSubmit={handleSubmit} className="mb-4">
                 <input
                     type="text"

@@ -1,10 +1,14 @@
-function StatsOverview({ rolls, sixStats, onReset, longestNoSixStreak }) {
+function StatsOverview({ rolls, sixStats, onReset, longestNoSixStreak, showResetButton, variant='app' }) {
+    // different styles if used for app or as overlay
+    const containerClass = variant === "overlay" ? "container-overlay" : "container";
+    const headingClass = variant === "overlay" ? "heading-overlay" : "heading";
+
     const totalRolls = rolls.length;
     const sixPercent = totalRolls > 0 ? ((sixStats[0] / totalRolls) * 100).toFixed(1) : 0;
 
     return (
-        <div className="container">
-            <h2 className="heading">📊 Statistics</h2>
+        <div className={containerClass}>
+            <h2 className={headingClass}>Statistics</h2>
             <div className="stats-grid-new">
 
                 {/* Total Rolls Stat Box */}
@@ -54,13 +58,14 @@ function StatsOverview({ rolls, sixStats, onReset, longestNoSixStreak }) {
                 </div>
 
             </div>
-
-            <button
-                onClick={onReset}
-                className="button-reset"
-            >
-                Reset statistics
-            </button>
+            {showResetButton && (
+                <button
+                    onClick={onReset}
+                    className="button-reset"
+                >
+                    Reset statistics
+                </button>
+            )}
         </div>
     );
 }

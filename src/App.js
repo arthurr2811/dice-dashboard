@@ -2,9 +2,12 @@ import { useState, useEffect } from "react";
 import DiceInput from "./components/DiceInput.js";
 import StatsOverview from "./components/StatsOverview.js";
 import BarChart from "./components/BarChart.js";
+import './app.css';
 
 const SERVER = "http://localhost:4000";
 
+// ToDo css aufräumen
+//  restl code aufräumen, projekt sortieren
 function App() {
     const [rolls, setRolls] = useState([]);
     const [counts, setCounts] = useState([0, 0, 0, 0, 0, 0]); // counts [1..6]
@@ -205,8 +208,9 @@ function App() {
                     sixStats={sixStats}
                     longestNoSixStreak={longestNoSixStreak}
                     onReset={resetStats}
+                    showResetButton={true}
                 />
-                <BarChart counts={counts} />
+                <BarChart counts={counts}/>
             </div>
 
             <div className="action-buttons">
