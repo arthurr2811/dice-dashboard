@@ -211,6 +211,9 @@ input[type="file"] {
     gap: 1rem;
     margin-bottom: 1.5rem;
 }
+.container-overlay .stats-grid-new {
+    grid-template-columns: repeat(3, 1fr);
+}
 .stat-box {
     background-color: #f9f9f9;
     border: 1px solid #e0e0e0;
