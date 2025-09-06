@@ -1,55 +1,26 @@
 import { useState, useEffect } from "react";
-import DiceInput from "./components/DiceInput.js";
-import StatsOverview from "./components/StatsOverview.js";
-import BarChart from "./components/BarChart.js";
-import './app.css';
+import { loadState, saveState } from "../services/stateService.js";
 
-const SERVER = "http://localhost:4000";
-
-// ToDo css aufräumen
-//  restl code aufräumen, projekt sortieren
-function App() {
+export function useDiceData() {
     const [rolls, setRolls] = useState([]);
-    const [counts, setCounts] = useState([0, 0, 0, 0, 0, 0]); // counts [1..6]
-    const [sixStats, setSixStats] = useState([0, 0, 0, 0]);   // [total6s, pairs, triplets, quadruplets]
+    const [counts, setCounts] = useState([0, 0, 0, 0, 0, 0]);
+    const [sixStats, setSixStats] = useState([0, 0, 0, 0]);
     const [sixStreak, setSixStreak] = useState(0);
     const [noSixStreak, setNoSixStreak] = useState(0);
     const [longestNoSixStreak, setLongestNoSixStreak] = useState(0);
 
-    // Backend I/O
-    const loadState = async () => {
-        try {
-            const res = await fetch(`${SERVER}/state`);
-            const data = await res.json();
+    // load initial data
+    useEffect(() => {
+        loadState().then((data) => {
+            if (!data) return;
             setRolls(data.rolls || []);
             setCounts(data.counts || [0, 0, 0, 0, 0, 0]);
             setSixStats(data.sixStats || [0, 0, 0, 0]);
             setSixStreak(data.sixStreak || 0);
             setNoSixStreak(data.noSixStreak || 0);
             setLongestNoSixStreak(data.longestNoSixStreak || 0);
-        } catch (e) {
-            console.warn("Konnte State nicht laden:", e);
-        }
-    };
-
-    const saveState = async (stateObj) => {
-        try {
-            await fetch(`${SERVER}/state`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(stateObj),
-            });
-        } catch (e) {
-            console.warn("Konnte State nicht speichern:", e);
-        }
-    };
-
-    // on start: load data from backend
-    useEffect(() => {
-        loadState();
+        });
     }, []);
-
-
 
     // add a new dice roll
     const addRoll = (n) => {
@@ -67,10 +38,10 @@ function App() {
         if (n === 6) {
             newSixStreak += 1;
             newNoSixStreak = 0;
-            newSixStats[0] += 1; // total 6s
-            if (newSixStreak === 2) newSixStats[1] += 1; // pair
-            if (newSixStreak === 3) newSixStats[2] += 1; // triplet
-            if (newSixStreak === 4) newSixStats[3] += 1; // quadruplet
+            newSixStats[0] += 1;
+            if (newSixStreak === 2) newSixStats[1] += 1;
+            if (newSixStreak === 3) newSixStats[2] += 1;
+            if (newSixStreak === 4) newSixStats[3] += 1;
         } else {
             newSixStreak = 0;
             newNoSixStreak += 1;
@@ -79,7 +50,6 @@ function App() {
             }
         }
 
-        // update local and write to backend
         setRolls(updatedRolls);
         setCounts(updatedCounts);
         setSixStats(newSixStats);
@@ -97,7 +67,7 @@ function App() {
         });
     };
 
-    // resets all stats
+    // reset stats
     const resetStats = () => {
         const confirmed = window.confirm("Are you sure you want to reset all statistics?");
         if (!confirmed) return;
@@ -121,7 +91,7 @@ function App() {
         saveState(fresh);
     };
 
-    // Export Rolls to .txt
+    // export rolls
     const exportRolls = () => {
         const content = rolls.join(",");
         const blob = new Blob([content], { type: "text/plain" });
@@ -132,7 +102,7 @@ function App() {
         link.click();
     };
 
-    // Import Rolls from .txt
+    // import rolls
     const importRolls = (e) => {
         const file = e.target.files[0];
         if (!file) return;
@@ -144,14 +114,13 @@ function App() {
                 .split(",")
                 .map((s) => parseInt(s.trim()))
                 .filter((n) => !isNaN(n) && n >= 1 && n <= 6);
-            // reset old rolls and process new rolls to calculate all statistics
+
             setRolls([]);
             processImportedRolls(parsed);
         };
         reader.readAsText(file);
     };
 
-    // calculate all statistics new, when import
     const processImportedRolls = (newRolls) => {
         const newCounts = [0, 0, 0, 0, 0, 0];
         const newSixStats = [0, 0, 0, 0];
@@ -195,40 +164,16 @@ function App() {
         });
     };
 
-    return (
-        <div className="main-app-container">
-            <div>
-                <h1>🎲 Dice Dashboard</h1>
-                <DiceInput onRoll={addRoll} />
-            </div>
-
-            <div className="stats-and-chart-container">
-                <StatsOverview
-                    rolls={rolls}
-                    sixStats={sixStats}
-                    longestNoSixStreak={longestNoSixStreak}
-                    onReset={resetStats}
-                    showResetButton={true}
-                />
-                <BarChart counts={counts}/>
-            </div>
-
-            <div className="action-buttons">
-                <button onClick={exportRolls} className="button-export-import">
-                    Export Rolls
-                </button>
-                <label className="button-export-import">
-                    <input
-                        type="file"
-                        accept=".txt"
-                        onChange={importRolls}
-                        placeholder={"Import Rolls"}
-                    />
-                    Import Rolls
-                </label>
-            </div>
-        </div>
-    );
+    return {
+        rolls,
+        counts,
+        sixStats,
+        sixStreak,
+        noSixStreak,
+        longestNoSixStreak,
+        addRoll,
+        resetStats,
+        exportRolls,
+        importRolls,
+    };
 }
-
-export default App;
